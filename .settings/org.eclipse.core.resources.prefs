@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/com/qf/sdklogin/IHuoLogin.java=UTF-8
+encoding//src/com/qf/sdklogin/SdkConfig.java=UTF-8
+encoding//src/com/qf/sdklogin/SdkConstant.java=UTF-8
+encoding//src/com/qf/sdklogin/bean/DeviceBean.java=UTF-8
+encoding//src/com/qf/sdklogin/bean/LoginResultBean.java=UTF-8
+encoding//src/com/qf/sdklogin/bean/ThirdLoginRequestBean.java=UTF-8
+encoding//src/com/qf/sdklogin/http=UTF-8
+encoding//src/com/qf/sdklogin/util=UTF-8

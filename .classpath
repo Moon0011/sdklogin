@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.andmore.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.andmore.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.andmore.DEPENDENCIES"/>
+	<classpathentry exported="true" kind="lib" path="libs/open_sdk_r5967.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/android-support-v4.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/okvolly_1.1.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/gson-2.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/wechat-sdk-android-without-mta-5.1.0.jar"/>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>
