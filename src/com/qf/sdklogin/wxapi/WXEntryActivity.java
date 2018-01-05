@@ -2,7 +2,6 @@ package com.qf.sdklogin.wxapi;
 
 import com.kymjs.rxvolley.RxVolley;
 import com.kymjs.rxvolley.client.HttpCallback;
-import com.qf.sdklogin.IHuoLogin;
 import com.qf.sdklogin.SdkConstant;
 import com.qf.sdklogin.bean.DeviceBean;
 import com.qf.sdklogin.bean.LoginResultBean;
@@ -44,7 +43,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 				req.scope = "snsapi_userinfo";
 				req.state = "wx_sdklogin";
 				api.sendReq(req);
-				api.registerApp(SdkConstant.WX_APP_ID);
 				SharedPreferences.Editor editor = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).edit();
 				editor.putBoolean("isWXFirstLogin", false);
 				editor.commit();
@@ -138,13 +136,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 		RxVolley.get(url, new HttpCallback() {
 			@Override
 			public void onSuccess(String t) {
-				// Toast.makeText(mContext, "t =" + t,
-				// Toast.LENGTH_SHORT).show();
 				if (!t.contains("errcode")) {
 					WxRespBean resbean = GsonUtil.getGson().fromJson(t, WxRespBean.class);
 					thirdLoginRequestBean.setAccess_token(resbean.getAccess_token());
 					thirdLoginRequestBean.setExpires_date(String.valueOf(resbean.getExpires_in()));
-					thirdLoginRequestBean.setUserfrom(IHuoLogin.LOGIN_WX + "");
+					thirdLoginRequestBean.setUserfrom(SdkConstant.LOGIN_WX + "");
 					thirdLoginRequestBean.setApp_id(SdkConstant.HS_APPID);
 					thirdLoginRequestBean.setFrom(SdkConstant.FROM);
 					thirdLoginRequestBean.setUser_token(SdkConstant.userToken);
@@ -163,7 +159,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 		RxVolley.get(url, new HttpCallback() {
 			@Override
 			public void onSuccess(String t) {
-				Toast.makeText(mContext, "t2 =" + t, Toast.LENGTH_SHORT).show();
 				WXUserInfoBean userinfo = GsonUtil.getGson().fromJson(t, WXUserInfoBean.class);
 				thirdLoginRequestBean.setUnionid(userinfo.getUnionid());
 				thirdLoginRequestBean.setNickname(userinfo.getNickname());
@@ -184,7 +179,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 				Log.e("WXEntryActivity", "onDataSuccess");
 				Intent intent = new Intent("com.qf.sdklogin.fornotice");
 				intent.putExtra("usertoken", data.getCp_user_token());
-				intent.putExtra("from", IHuoLogin.LOGIN_WX);
+				intent.putExtra("from", SdkConstant.LOGIN_WX);
 				sendBroadcast(intent);
 				WXEntryActivity.this.finish();
 				android.os.Process.killProcess(android.os.Process.myPid());

@@ -23,4 +23,9 @@ public class SdkConstant {
 	// 微信接口
 	public static String WX_GET_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
 	public static String WX_GET_USER_INFO = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
+
+	public static final int LOGIN_DEF = 1;
+	public static final int LOGIN_QQ = 2;
+	public static final int LOGIN_WX = 3;
+	public static final int LOGIN_XLWB = 4;
 }

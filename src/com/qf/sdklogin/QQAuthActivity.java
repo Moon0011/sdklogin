@@ -120,7 +120,7 @@ public class QQAuthActivity extends Activity {
 			try {
 				if (null != thirdLoginRequestBean) {
 					thirdLoginRequestBean.setAccess_token(values.getString("access_token"));
-					thirdLoginRequestBean.setUserfrom(IHuoLogin.LOGIN_QQ + "");
+					thirdLoginRequestBean.setUserfrom(SdkConstant.LOGIN_QQ + "");
 					thirdLoginRequestBean.setExpires_date(values.getString("expires_time"));
 					thirdLoginRequestBean.setOpenid(values.getString("openid"));
 					thirdLoginRequestBean.setIntroducer("qfgames");
@@ -202,7 +202,7 @@ public class QQAuthActivity extends Activity {
 			public void onDataSuccess(LoginResultBean data) {
 				Intent intent = new Intent("com.qf.sdklogin.fornotice");
 				intent.putExtra("usertoken", data.getCp_user_token());
-				intent.putExtra("from", IHuoLogin.LOGIN_QQ);
+				intent.putExtra("from", SdkConstant.LOGIN_QQ);
 				sendBroadcast(intent);
 				QQAuthActivity.this.finish();
 				android.os.Process.killProcess(android.os.Process.myPid());
@@ -222,7 +222,6 @@ public class QQAuthActivity extends Activity {
 		httpCallbackDecode.setLoadingCancel(false);
 		httpCallbackDecode.setShowLoading(false);
 		httpCallbackDecode.setLoadMsg("ÕýÔÚµÇÂ¼...");
-		RxVolley.post(SdkConstant.QF_LOGIN_OAUTH, httpParamsBuild.getHttpParams(),
-				httpCallbackDecode);
+		RxVolley.post(SdkConstant.QF_LOGIN_OAUTH, httpParamsBuild.getHttpParams(), httpCallbackDecode);
 	}
 }
