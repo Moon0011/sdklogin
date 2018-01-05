@@ -32,8 +32,7 @@ import android.widget.Toast;
 public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
 	private IWXAPI api;
-	public static final String APP_ID = "wx6af2ec99d9833b59";
-	public static final String APP_SECRET = "5ef500d044dd91c00ad82ce8924c0b58";
+
 	private Context mContext;
 	private ThirdLoginRequestBean thirdLoginRequestBean = new ThirdLoginRequestBean();
 
@@ -45,7 +44,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 				req.scope = "snsapi_userinfo";
 				req.state = "wx_sdklogin";
 				api.sendReq(req);
-				api.registerApp(APP_ID);
+				api.registerApp(SdkConstant.WX_APP_ID);
 				SharedPreferences.Editor editor = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).edit();
 				editor.putBoolean("isWXFirstLogin", false);
 				editor.commit();
@@ -57,7 +56,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mContext = this;
-		api = WXAPIFactory.createWXAPI(this, APP_ID);
+		api = WXAPIFactory.createWXAPI(this, SdkConstant.WX_APP_ID);
 		api.handleIntent(getIntent(), this);
 
 		Intent intent = getIntent();
@@ -134,9 +133,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	}
 
 	private void getAccessToken(String code) {
-		String url = String.format(
-				"https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
-				APP_ID, APP_SECRET, code);
+		String url = String.format(SdkConstant.WX_GET_ACCESS_TOKEN, SdkConstant.WX_APP_ID, SdkConstant.WX_APP_SECRET,
+				code);
 		RxVolley.get(url, new HttpCallback() {
 			@Override
 			public void onSuccess(String t) {
@@ -161,8 +159,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	}
 
 	private void getUserInfo(String accessToken, String openid) {
-		String url = String.format("https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s", accessToken,
-				openid);
+		String url = String.format(SdkConstant.WX_GET_USER_INFO, accessToken, openid);
 		RxVolley.get(url, new HttpCallback() {
 			@Override
 			public void onSuccess(String t) {
@@ -207,7 +204,6 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 		httpCallbackDecode.setLoadingCancel(false);
 		httpCallbackDecode.setShowLoading(false);
 		httpCallbackDecode.setLoadMsg("ÕýÔÚµÇÂ¼...");
-		RxVolley.post("http://aqfsdk.520cai.cn/api/v7/user/loginoauth", httpParamsBuild.getHttpParams(),
-				httpCallbackDecode);
+		RxVolley.post(SdkConstant.QF_LOGIN_OAUTH, httpParamsBuild.getHttpParams(), httpCallbackDecode);
 	}
 }

@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by Administrator on 2018/1/3.
@@ -56,7 +55,7 @@ public class QQAuthActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		mContext = this;
 		if (mTencent == null) {
-			mTencent = Tencent.createInstance("101453900", this);
+			mTencent = Tencent.createInstance(SdkConstant.QQ_APP_ID, this);
 		}
 		Intent intent = getIntent();
 		SdkConstant.HS_APPID = intent.getStringExtra("appid");
@@ -223,7 +222,7 @@ public class QQAuthActivity extends Activity {
 		httpCallbackDecode.setLoadingCancel(false);
 		httpCallbackDecode.setShowLoading(false);
 		httpCallbackDecode.setLoadMsg("ÕýÔÚµÇÂ¼...");
-		RxVolley.post("http://aqfsdk.520cai.cn/api/v7/user/loginoauth", httpParamsBuild.getHttpParams(),
+		RxVolley.post(SdkConstant.QF_LOGIN_OAUTH, httpParamsBuild.getHttpParams(),
 				httpCallbackDecode);
 	}
 }

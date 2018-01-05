@@ -18,7 +18,6 @@ public class WXAuthActivity extends Activity {
 	// AppID wx6af2ec99d9833b59
 	// AppSecret wx6af2ec99d9833b59
 	private IWXAPI api;
-	public static final String APP_ID = "wx6af2ec99d9833b59";
 	private ThirdLoginRequestBean thirdLoginRequestBean = new ThirdLoginRequestBean();
 
 	private Handler mHandler = new Handler() {
@@ -29,7 +28,7 @@ public class WXAuthActivity extends Activity {
 				req.scope = "snsapi_userinfo";
 				req.state = "wx_sdklogin";
 				api.sendReq(req);
-				api.registerApp(APP_ID);
+				api.registerApp(SdkConstant.WX_APP_ID);
 				SharedPreferences.Editor editor = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).edit();
 				editor.putBoolean("isWXFirstLogin", false);
 				editor.commit();
@@ -40,7 +39,7 @@ public class WXAuthActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		api = WXAPIFactory.createWXAPI(this, APP_ID);
+		api = WXAPIFactory.createWXAPI(this, SdkConstant.WX_APP_ID);
 		Intent intent = getIntent();
 		SdkConstant.HS_APPID = intent.getStringExtra("appid");
 		SdkConstant.FROM = intent.getStringExtra("from");
