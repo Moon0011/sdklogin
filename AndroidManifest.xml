@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".WXAuthActivity"
+            android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:launchMode="singleTask" >
             <intent-filter>
@@ -65,10 +65,6 @@
                 <data android:scheme="tencent101453900" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:exported="true"
-              />
     </application>
 
 </manifest>

@@ -98,32 +98,31 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 			case BaseResp.ErrCode.ERR_OK:
 				String code = ((SendAuth.Resp) resp).code;
 				getAccessToken(code);
-				WXEntryActivity.this.finish();
 				break;
 			case BaseResp.ErrCode.ERR_USER_CANCEL:
 				result = "您取消了授权";
 				Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
-				close();
+				WXEntryActivity.this.finish();
 				break;
 			case BaseResp.ErrCode.ERR_AUTH_DENIED:
 				result = "授权被拒绝";
 				Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
-				close();
+				WXEntryActivity.this.finish();
 				break;
 			default:
 				result = "授权失败";
 				Toast.makeText(mContext, result, Toast.LENGTH_SHORT).show();
-				close();
+				WXEntryActivity.this.finish();
 				break;
 			}
-		} else {
-			close();
 		}
 	}
 
 	private void close() {
-		finish();
-		overridePendingTransition(0, 0);
+		// Toast.makeText(mContext, "close", Toast.LENGTH_SHORT).show();
+		// WXEntryActivity.this.finish();
+		// android.os.Process.killProcess(android.os.Process.myPid());
+		// System.exit(0);
 	}
 
 	@Override
