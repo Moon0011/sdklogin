@@ -62,7 +62,6 @@ public class QQAuthActivity extends Activity {
 		SdkConstant.FROM = intent.getStringExtra("from");
 		SdkConstant.userToken = intent.getStringExtra("usertoken");
 		SdkConstant.packageName = intent.getStringExtra("packagename");
-		SdkConstant.deviceBean = (DeviceBean) intent.getSerializableExtra("devicebean");
 		SdkConstant.HS_CLIENTID = intent.getStringExtra("clientid");
 		SdkConstant.HS_CLIENTKEY = intent.getStringExtra("clientkey");
 		SdkConstant.SERVER_TIME_INTERVAL = intent.getLongExtra("servertimeinterval", 0);
@@ -195,7 +194,8 @@ public class QQAuthActivity extends Activity {
 	}
 
 	private void submitThirdLogin(ThirdLoginRequestBean thirdLoginRequestBean) {
-		HttpParamsBuild httpParamsBuild = new HttpParamsBuild(GsonUtil.getGson().toJson(thirdLoginRequestBean));
+		HttpParamsBuild httpParamsBuild = new HttpParamsBuild(GsonUtil.getGson().toJson(thirdLoginRequestBean),
+				mContext);
 		HttpCallbackDecode httpCallbackDecode = new HttpCallbackDecode<LoginResultBean>(mContext,
 				httpParamsBuild.getAuthkey()) {
 			@Override

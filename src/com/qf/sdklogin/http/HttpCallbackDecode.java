@@ -73,7 +73,9 @@ public abstract class HttpCallbackDecode<E> extends HttpCallback {
 			String sign = jsonObject.optString("sign");
 			String responcedata = jsonObject.optString("responcedata");
 			// 验证签名
-			boolean verify = RSAUtils.verify(responcedata.getBytes(), SdkConstant.RSA_PUBLIC_KEY, sign);
+			String rsapublickey = activity.getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS)
+					.getString("rsapublickey", "");
+			boolean verify = RSAUtils.verify(responcedata.getBytes(), rsapublickey, sign);
 			if (verify) {//
 				E dataObject = new Gson().fromJson(responcedata, getTClass());
 				onDataSuccess(dataObject);

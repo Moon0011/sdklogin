@@ -9,6 +9,7 @@ import com.qf.sdklogin.SdkConstant;
 import com.qf.sdklogin.util.AuthCodeUtil;
 import com.qf.sdklogin.util.RSAUtils;
 
+import android.content.Context;
 import android.util.Log;
 
 public class HttpParamsBuild {
@@ -19,38 +20,43 @@ public class HttpParamsBuild {
 	private String authkey;
 	private final ArrayList<HttpParamsEntry> mHeaders = new ArrayList<>(4);
 	private HttpParams httpParams;
+	private Context mContext;
 
-	public HttpParamsBuild(String jsonParam) {
+	public HttpParamsBuild(String jsonParam, Context context) {
 		this.jsonParam = jsonParam;
+		this.mContext = context;
 		encodeData();
 	}
 
 	private void encodeData() {
+		Long servertimeinterval = mContext.getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS)
+				.getLong("servertimeinterval", 0);
+		String clientid = mContext.getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getString("clientid",
+				"");
+		String clientkey = mContext.getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getString("clientkey",
+				"");
+		String rsapublickey = mContext.getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS)
+				.getString("rsapublickey", "");
 		httpParams = new HttpParams();
 		String randCh = getRandCh(16);
 		// 生成key
 		// client_id 与 时间戳 与 rand16 使用下划线(_)连接，得到 rsakey
-		long time = System.currentTimeMillis() + SdkConstant.SERVER_TIME_INTERVAL;
-		StringBuffer keyBuffer = new StringBuffer(SdkConstant.HS_CLIENTID).append("_").append(time).append("_")
-				.append(randCh);
+		long time = System.currentTimeMillis() + servertimeinterval;
+		StringBuffer keyBuffer = new StringBuffer(clientid).append("_").append(time).append("_").append(randCh);
 		String key = null;
 		try {
-			key = new String(RSAUtils.encryptByPublicKey(keyBuffer.toString().getBytes(), SdkConstant.RSA_PUBLIC_KEY),
-					"utf-8");
+			key = new String(RSAUtils.encryptByPublicKey(keyBuffer.toString().getBytes(), rsapublickey), "utf-8");
 			// 生成key
 			httpParams.put("key", key);
-			Log.e("HttpParamsBuild", "key = " + key);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		// 生成加密数据
 		// 6、2中的rand16与client_key组成对称加密参数 authkey ([client_key]_rand16)
 		// 7、将requestdata与 authkey 对称加密并 URLencoding 得到请求参数 `data`
-		StringBuffer dataKeyBuffer = new StringBuffer(SdkConstant.HS_CLIENTKEY).append(randCh);
+		StringBuffer dataKeyBuffer = new StringBuffer(clientkey).append(randCh);
 		this.authkey = dataKeyBuffer.toString();
 		String data = AuthCodeUtil.authcodeEncode(jsonParam, authkey);
-		Log.e("HttpParamsBuild", "jsonParam = " + jsonParam);
-		Log.e("HttpParamsBuild", "authkey = " + authkey);
 		httpParams.put("data", data);
 		for (HttpParamsEntry httpParamsEntry : mHeaders) {
 			httpParams.putHeaders(httpParamsEntry.k, httpParamsEntry.v);
