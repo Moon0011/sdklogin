@@ -18,10 +18,13 @@ public class SdkConstant {
 	public static String WX_APP_ID = "wx6af2ec99d9833b59";
 	public static String WX_APP_SECRET = "5ef500d044dd91c00ad82ce8924c0b58";
 
-	public static String QF_LOGIN_OAUTH = "http://aqfsdk.520cai.cn/api/v7/user/loginoauth";
+//	public static String QF_LOGIN_OAUTH = "http://aqfsdk.520cai.cn/api/v7/user/loginoauth";
+//	public static String GET_ACCESS_TOKEN = "http://aqfsdk.520cai.cn/api/v7/user/wxaccesstoken";
+	
+	public static String QF_LOGIN_OAUTH = "http://api.520cai.com/api/v7/user/loginoauth";
+	public static String GET_ACCESS_TOKEN = "http://api.520cai.com/api/v7/user/wxaccesstoken";
 
 	// 微信接口
-	public static String WX_GET_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
 	public static String WX_GET_USER_INFO = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s";
 
 	public static final int LOGIN_DEF = 1;

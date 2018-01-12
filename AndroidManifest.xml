@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="com.qf.sdklogin.fornotice.RECEIVE" />
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -26,6 +27,7 @@
         android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" >
         <activity
             android:name=".QQAuthActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|navigation"
             android:exported="true"
             android:launchMode="singleTask" >
             <intent-filter>
@@ -34,19 +36,13 @@
         </activity>
         <activity
             android:name=".wxapi.WXEntryActivity"
+            android:configChanges="screenSize|orientation|keyboardHidden|navigation"
             android:exported="true"
             android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
-        <receiver android:name="com.qf.sdklogin.FirstLoginReceive" >
-            <intent-filter>
-                <action android:name="com.qf.sdklogin.forfirstlogin" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden"

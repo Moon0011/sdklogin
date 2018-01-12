@@ -4,11 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 public class FirstLoginReceive extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent arg1) {
+		Log.e("sdklogin", "==========FirstLoginReceive onReceive=========");
 		if (arg1.getIntExtra("type", -1) == 1) {
 			SharedPreferences.Editor editor = context.getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS)
 					.edit();

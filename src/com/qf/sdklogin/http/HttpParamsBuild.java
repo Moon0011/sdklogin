@@ -37,6 +37,7 @@ public class HttpParamsBuild {
 				"");
 		String rsapublickey = mContext.getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS)
 				.getString("rsapublickey", "");
+		Log.e("sdklogin", "rsapublickey= " + rsapublickey);
 		httpParams = new HttpParams();
 		String randCh = getRandCh(16);
 		// 生成key
@@ -55,6 +56,7 @@ public class HttpParamsBuild {
 		// 6、2中的rand16与client_key组成对称加密参数 authkey ([client_key]_rand16)
 		// 7、将requestdata与 authkey 对称加密并 URLencoding 得到请求参数 `data`
 		StringBuffer dataKeyBuffer = new StringBuffer(clientkey).append(randCh);
+		Log.e("sdklogin", "=====clientkey=== " + clientkey + " ,randCh =" + randCh);
 		this.authkey = dataKeyBuffer.toString();
 		String data = AuthCodeUtil.authcodeEncode(jsonParam, authkey);
 		httpParams.put("data", data);

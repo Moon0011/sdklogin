@@ -20,6 +20,15 @@ public class ThirdLoginRequestBean {
 	private DeviceBean device = SdkConstant.deviceBean;
 	private String packagename = SdkConstant.packageName;// app 包名(add
 	private String unionid;
+	private String code;
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public ThirdLoginRequestBean() {
 		timestamp = System.currentTimeMillis() + SdkConstant.SERVER_TIME_INTERVAL;

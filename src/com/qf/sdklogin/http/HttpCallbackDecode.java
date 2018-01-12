@@ -41,6 +41,7 @@ public abstract class HttpCallbackDecode<E> extends HttpCallback {
 
 	@Override
 	public final void onSuccess(String t) {
+		// Log.e("sdklogin", "onSuccess t= " + t);
 		try {
 			JSONObject object = new JSONObject(t);
 			String data = object.optString("data");
@@ -77,6 +78,7 @@ public abstract class HttpCallbackDecode<E> extends HttpCallback {
 					.getString("rsapublickey", "");
 			boolean verify = RSAUtils.verify(responcedata.getBytes(), rsapublickey, sign);
 			if (verify) {//
+				// Log.e("sdklogin", "responcedata =" + responcedata);
 				E dataObject = new Gson().fromJson(responcedata, getTClass());
 				onDataSuccess(dataObject);
 			} else {

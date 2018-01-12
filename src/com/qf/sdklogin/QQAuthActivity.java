@@ -34,18 +34,34 @@ public class QQAuthActivity extends Activity {
 	private UserInfo mInfo;
 	private Context mContext;
 	private ThirdLoginRequestBean thirdLoginRequestBean = new ThirdLoginRequestBean();
-
+	private DeviceBean deviceBean;
 	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			if (getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getBoolean("isQqFirstLogin", true)) {
-				if (!mTencent.isSessionValid()) {
-					mTencent.login(QQAuthActivity.this, "all", loginListener);
-					SharedPreferences.Editor editor = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS)
-							.edit();
-					editor.putBoolean("isQqFirstLogin", false);
-					editor.commit();
-				}
+			Log.e("sdklogin", "==========handleMessage()========="
+					+ getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getBoolean("isQqFirstLogin", true));
+			if (!mTencent.isSessionValid()) {
+				Log.e("sdklogin", "==========isSessionValid()=========");
+				mTencent.login(QQAuthActivity.this, "all", loginListener);
+				SharedPreferences.Editor editor = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).edit();
+				editor.putString("appid", SdkConstant.HS_APPID);
+				editor.putString("from", SdkConstant.FROM);
+				editor.putString("usertoken", SdkConstant.userToken);
+				editor.putString("packagename", SdkConstant.packageName);
+				editor.putString("clientid", SdkConstant.HS_CLIENTID);
+				editor.putString("clientkey", SdkConstant.HS_CLIENTKEY);
+				editor.putLong("servertimeinterval", SdkConstant.SERVER_TIME_INTERVAL);
+				editor.putString("rsapublickey", SdkConstant.RSA_PUBLIC_KEY);
+
+				editor.putString("device_id", deviceBean.getDevice_id());
+				editor.putString("userua", deviceBean.getUserua());
+				editor.putString("ipaddrid", deviceBean.getIpaddrid());
+				editor.putString("deviceinfo", deviceBean.getDeviceinfo());
+				editor.putString("idfv", deviceBean.getIdfv());
+				editor.putString("idfa", deviceBean.getIdfa());
+				editor.putString("local_ip", deviceBean.getLocal_ip());
+				editor.putString("mac", deviceBean.getMac());
+				editor.commit();
 			}
 		}
 	};
@@ -53,10 +69,12 @@ public class QQAuthActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.e("sdklogin", "=======onCreate=====");
 		mContext = this;
 		if (mTencent == null) {
 			mTencent = Tencent.createInstance(SdkConstant.QQ_APP_ID, this);
 		}
+
 		Intent intent = getIntent();
 		SdkConstant.HS_APPID = intent.getStringExtra("appid");
 		SdkConstant.FROM = intent.getStringExtra("from");
@@ -74,7 +92,7 @@ public class QQAuthActivity extends Activity {
 		thirdLoginRequestBean.setDevice(SdkConstant.deviceBean);
 		thirdLoginRequestBean.setClient_id(SdkConstant.HS_CLIENTID);
 
-		DeviceBean deviceBean = new DeviceBean();
+		deviceBean = new DeviceBean();
 		deviceBean.setDevice_id(intent.getStringExtra("device_id"));
 		deviceBean.setUserua(intent.getStringExtra("userua"));
 		deviceBean.setIpaddrid(intent.getStringExtra("ipaddrid"));
@@ -94,6 +112,7 @@ public class QQAuthActivity extends Activity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.e("sdklogin", "===onActivityResult()======");
 		if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
 			Tencent.onActivityResultData(requestCode, resultCode, data, loginListener);
 		}
@@ -118,11 +137,13 @@ public class QQAuthActivity extends Activity {
 		protected void doComplete(JSONObject values) {
 			try {
 				if (null != thirdLoginRequestBean) {
+					Log.e("sdklogin", "=============doComplete()=========");
 					thirdLoginRequestBean.setAccess_token(values.getString("access_token"));
 					thirdLoginRequestBean.setUserfrom(SdkConstant.LOGIN_QQ + "");
 					thirdLoginRequestBean.setExpires_date(values.getString("expires_time"));
 					thirdLoginRequestBean.setOpenid(values.getString("openid"));
 					thirdLoginRequestBean.setIntroducer("qfgames");
+					thirdLoginRequestBean.setUnionid("");
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -151,12 +172,16 @@ public class QQAuthActivity extends Activity {
 
 		@Override
 		public void onError(UiError e) {
+			Log.e("sdklogin", "=============onError()========= " + e.errorMessage);
 			mTencent.logout(mContext);
+			QQAuthActivity.this.finish();
 		}
 
 		@Override
 		public void onCancel() {
+			Log.e("sdklogin", "=============onCancel()=========");
 			mTencent.logout(mContext);
+			QQAuthActivity.this.finish();
 		}
 	}
 
@@ -166,11 +191,13 @@ public class QQAuthActivity extends Activity {
 
 				@Override
 				public void onError(UiError e) {
-					Log.e("QQAuthActivity", "onError =" + e.errorMessage);
+					Log.e("sdklogin", "updateUserInfo onError =" + e.errorMessage);
+					QQAuthActivity.this.finish();
 				}
 
 				@Override
 				public void onComplete(final Object response) {
+					Log.e("sdklogin", "updateUserInfo onComplete");
 					JSONObject json = (JSONObject) response;
 					try {
 						if (null != thirdLoginRequestBean) {
@@ -185,7 +212,8 @@ public class QQAuthActivity extends Activity {
 
 				@Override
 				public void onCancel() {
-					Log.e("QQAuthActivity", "onCancel");
+					Log.e("sdklogin", "updateUserInfo onCancel");
+					QQAuthActivity.this.finish();
 				}
 			};
 			mInfo = new UserInfo(mContext, mTencent.getQQToken());
@@ -194,12 +222,14 @@ public class QQAuthActivity extends Activity {
 	}
 
 	private void submitThirdLogin(ThirdLoginRequestBean thirdLoginRequestBean) {
+		Log.e("sdklogin", "thirdLoginRequestBean = " + thirdLoginRequestBean.toString());
 		HttpParamsBuild httpParamsBuild = new HttpParamsBuild(GsonUtil.getGson().toJson(thirdLoginRequestBean),
 				mContext);
 		HttpCallbackDecode httpCallbackDecode = new HttpCallbackDecode<LoginResultBean>(mContext,
 				httpParamsBuild.getAuthkey()) {
 			@Override
 			public void onDataSuccess(LoginResultBean data) {
+				Log.e("sdklogin", "=====onDataSuccess===");
 				Intent intent = new Intent("com.qf.sdklogin.fornotice");
 				intent.putExtra("usertoken", data.getCp_user_token());
 				intent.putExtra("from", SdkConstant.LOGIN_QQ);
@@ -211,7 +241,7 @@ public class QQAuthActivity extends Activity {
 
 			@Override
 			public void onFailure(String code, String msg) {
-				Log.e("QQAuthActivity", "onFailure msg =" + msg + " ,code =" + code);
+				Log.e("sdklogin", "onFailure msg =" + msg + " ,code =" + code);
 				QQAuthActivity.this.finish();
 				android.os.Process.killProcess(android.os.Process.myPid());
 				System.exit(0);
