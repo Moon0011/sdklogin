@@ -162,7 +162,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 				Log.e("sdklogin", "cp_user_token =" + data.getCp_user_token() + " ,mem_id =" + data.getMem_id());
 				Intent intent = new Intent("com.qf.sdklogin.fornotice");
 				intent.putExtra("usertoken", data.getCp_user_token());
+				intent.putExtra("code", 200);
 				intent.putExtra("from", SdkConstant.LOGIN_WX);
+				intent.putExtra("memid", data.getMem_id());
 				sendBroadcast(intent);
 				Log.e("sdklogin", "submitThirdLogin11");
 				WXEntryActivity.this.finish();
@@ -174,6 +176,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 			@Override
 			public void onFailure(String code, String msg) {
 				Log.e("sdklogin", "submitThirdLogin onFailure msg =" + msg + " ,code =" + code);
+				Intent intent = new Intent("com.qf.sdklogin.fornotice");
+				intent.putExtra("code", 500);
+				sendBroadcast(intent);
 				WXEntryActivity.this.finish();
 				android.os.Process.killProcess(android.os.Process.myPid());
 				System.exit(0);

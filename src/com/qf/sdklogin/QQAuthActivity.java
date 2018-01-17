@@ -232,6 +232,8 @@ public class QQAuthActivity extends Activity {
 				Log.e("sdklogin", "=====onDataSuccess===");
 				Intent intent = new Intent("com.qf.sdklogin.fornotice");
 				intent.putExtra("usertoken", data.getCp_user_token());
+				intent.putExtra("code", 200);
+				intent.putExtra("memid", data.getMem_id());
 				intent.putExtra("from", SdkConstant.LOGIN_QQ);
 				sendBroadcast(intent);
 				QQAuthActivity.this.finish();
@@ -242,6 +244,9 @@ public class QQAuthActivity extends Activity {
 			@Override
 			public void onFailure(String code, String msg) {
 				Log.e("sdklogin", "onFailure msg =" + msg + " ,code =" + code);
+				Intent intent = new Intent("com.qf.sdklogin.fornotice");
+				intent.putExtra("code", 500);
+				sendBroadcast(intent);
 				QQAuthActivity.this.finish();
 				android.os.Process.killProcess(android.os.Process.myPid());
 				System.exit(0);
