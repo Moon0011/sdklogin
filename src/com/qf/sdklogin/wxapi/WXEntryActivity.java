@@ -45,6 +45,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 			api.sendReq(req);
 			SharedPreferences.Editor editor = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).edit();
 			editor.putString("appid", SdkConstant.HS_APPID);
+			editor.putString("agent", SdkConstant.HS_AGENT);
 			editor.putString("from", SdkConstant.FROM);
 			editor.putString("usertoken", SdkConstant.userToken);
 			editor.putString("packagename", SdkConstant.packageName);
@@ -74,6 +75,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 		api.handleIntent(getIntent(), this);
 		Intent intent = getIntent();
 		SdkConstant.HS_APPID = intent.getStringExtra("appid");
+		SdkConstant.HS_AGENT = intent.getStringExtra("agent");
 		SdkConstant.FROM = intent.getStringExtra("from");
 		SdkConstant.userToken = intent.getStringExtra("usertoken");
 		SdkConstant.packageName = intent.getStringExtra("packagename");
@@ -195,6 +197,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 	@SuppressWarnings("deprecation")
 	private void getAccessToken(String code) {
 		String appid = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getString("appid", "");
+		String agent = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getString("agent", "");
 		String from = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getString("from", "");
 		String usertoken = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getString("usertoken", "");
 		String packagename = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).getString("packagename", "");
@@ -219,6 +222,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 		deviceBean.setMac(mac);
 
 		thirdLoginRequestBean.setUserfrom(SdkConstant.LOGIN_WX + "");
+		thirdLoginRequestBean.setAgentgame(agent);
 		thirdLoginRequestBean.setApp_id(appid);
 		thirdLoginRequestBean.setFrom(from);
 		thirdLoginRequestBean.setUser_token(usertoken);

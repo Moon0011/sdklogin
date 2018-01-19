@@ -45,6 +45,7 @@ public class QQAuthActivity extends Activity {
 				mTencent.login(QQAuthActivity.this, "all", loginListener);
 				SharedPreferences.Editor editor = getSharedPreferences("sdklogin", Context.MODE_MULTI_PROCESS).edit();
 				editor.putString("appid", SdkConstant.HS_APPID);
+				editor.putString("agent", SdkConstant.HS_AGENT);
 				editor.putString("from", SdkConstant.FROM);
 				editor.putString("usertoken", SdkConstant.userToken);
 				editor.putString("packagename", SdkConstant.packageName);
@@ -77,6 +78,7 @@ public class QQAuthActivity extends Activity {
 
 		Intent intent = getIntent();
 		SdkConstant.HS_APPID = intent.getStringExtra("appid");
+		SdkConstant.HS_AGENT = intent.getStringExtra("agent");
 		SdkConstant.FROM = intent.getStringExtra("from");
 		SdkConstant.userToken = intent.getStringExtra("usertoken");
 		SdkConstant.packageName = intent.getStringExtra("packagename");
@@ -86,6 +88,7 @@ public class QQAuthActivity extends Activity {
 		SdkConstant.RSA_PUBLIC_KEY = intent.getStringExtra("rsapublickey");
 
 		thirdLoginRequestBean.setApp_id(SdkConstant.HS_APPID);
+		thirdLoginRequestBean.setAgentgame(SdkConstant.HS_AGENT);
 		thirdLoginRequestBean.setFrom(SdkConstant.FROM);
 		thirdLoginRequestBean.setUser_token(SdkConstant.userToken);
 		thirdLoginRequestBean.setPackagename(SdkConstant.packageName);
